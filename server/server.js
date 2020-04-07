@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const formidable = require('express-formidable');
 const cloudinary = require('cloudinary');
+// const mailer = require('nodemailer');
 
 const app = express();
 const mongoose = require('mongoose');
@@ -34,6 +35,33 @@ const { Site } = require('./models/site');
 const { auth } = require('./middleware/auth');
 const { admin } = require('./middleware/admin');
 
+// UTILS
+const { sendEmail } = require('./utils/mail/index');
+
+// const smtpTransport = mailer.createTransport({
+//     service:"Gmail",
+//     auth:{
+//         user: "waves.guitars.rev@gmail.com",
+//         pass: "fulltone1985"
+//     }
+// });
+
+// var mail = {
+//     from: "Waves <waves.guitars.rev@gmail.com>",
+//     to: "francis.jones.rev@gmail.com",
+//     subject: "Send test email",
+//     text: "Testing our waves mails",
+//     html: "<b>Hello this works!</b>"
+// }
+
+// smtpTransport.sendMail(mail, function(error,response){
+//     if(error) {
+//         console.log(error);
+//     } else {
+//         console.log('email sent');
+//     }
+//     smtpTransport.close();
+// })
 
 //==========================================
 //                  PRODUCTS
@@ -209,6 +237,7 @@ app.post('/api/users/register', (req,res) => {
 
     user.save((err, doc) => {
         if(err) return res.json({success:false, err});
+        sendEmail(doc.email, doc.name, null, "welcome");
         res.status(200).json({
             success: true,
             // userdata: doc

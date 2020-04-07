@@ -78,7 +78,7 @@ class UserCart extends Component {
     transactionSuccess = () => {
         this.props.dispatch(onSuccessBuy({
             cartDetail: this.props.user.cartDetail,
-            paymentData: data
+            // paymentData: data
         })).then(()=>{
             if(this.props.user.successBuy){
                 this.setState({
